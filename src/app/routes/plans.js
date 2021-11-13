@@ -6,6 +6,7 @@ const {
   view,
   create, planEvents,
   singlePlan,
+  changePlanName
 } = require("../controller/plans");
 // const { isAuth } = require("../../middlewares/auth");
 
@@ -15,5 +16,6 @@ router.get("/:planId", singlePlan);
 router.post("/create", create);
 router.delete("/remove/:planId", remove);
 router.patch("/update/:planId", update);
+router.patch("/changePlanName/:activePlanId", changePlanName);
 
 module.exports = router;

@@ -12,6 +12,24 @@ module.exports = {
       next(error)
     }
   },
+
+  changePlanName: async (req, res, next) => {
+    const planName = req.body.planName
+    const activePlanId = req.params.activePlanId
+
+    try {
+      const result = await models.ActivePlan.update({ planName }, { where: { id: activePlanId } })
+
+      res.status(200).json({
+        status: "success",
+        message: "plan name updated"
+      })
+
+    } catch (error) {
+      next(error)
+    }
+  },
+
   create: async (req, res, next) => {
     const body = req.body;
 

@@ -27,9 +27,19 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: true,
         references: { model: "Users", key: "id" },
       },
+      planId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        foreignKey: true,
+        references: { model: "Plans", key: "id" },
+      },
+      planName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       planType: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       noOfEvents: {
         type: DataTypes.INTEGER,
@@ -42,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
       tenure: {
         type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      expiresAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
       transactionId: {
         type: DataTypes.STRING,

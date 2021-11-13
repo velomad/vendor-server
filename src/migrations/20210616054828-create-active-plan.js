@@ -14,6 +14,16 @@ module.exports = {
         foreignKey: true,
         references: { model: "Users", key: "id" },
       },
+      planId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        foreignKey: true,
+        references: { model: "Plans", key: "id" },
+      },
+      planName: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       planType: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -29,6 +39,10 @@ module.exports = {
       tenure: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      expiresAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       transactionId: {
         type: Sequelize.STRING,
