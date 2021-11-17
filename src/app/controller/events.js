@@ -199,6 +199,59 @@ module.exports = {
     }
   },
 
+  userTimeline: async (req, res, next) => {
+    const userId = req.payload.aud;
+    try {
+      const result = await models.Timeline.findAll(
+        {
+          include: [
+            {
+              model: models.Event,
+              as: "event",
+              include: [
+                {
+                  model: models.EventDetail,
+                  required: true,
+                  as: "details",
+                  attributes: { exclude: ["eventId"] }
+                },
+                {
+                  model: models.Plan,
+                  as: "planDetails",
+                  attributes: ["planName"]
+                },
+                {
+                  model: models.EventUtilities,
+                  as: "utilities"
+                },
+                {
+                  model: models.EventTime,
+                  required: true,
+                  as: "eventTime",
+                  attributes: ["time"]
+                },
+                {
+                  model: models.City,
+                  required: true,
+                  as: "city",
+                  attributes: { exclude: ["id"] }
+                }
+              ]
+            }
+          ]
+        },
+        { where: { userId } }
+      );
+
+      res.status(200).json({
+        status: "success",
+        results: result
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   deleteEvent: async (req, res, next) => {
     const eventId = req.params.eventId;
     const userId = req.payload.aud;

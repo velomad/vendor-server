@@ -19,11 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         foreigKey: true,
         references: { model: "User", key: "id" },
       },
-      firstName: {
-        allowNull: false,
-        type: DataTypes.STRING(40),
-      },
-      lastName: {
+      userName: {
         allowNull: false,
         type: DataTypes.STRING(40),
       },
