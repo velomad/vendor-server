@@ -119,7 +119,7 @@ module.exports = {
         await models.ActivePlanEvent.create(
           {
             eventId: createEvent.id,
-            activePlanId: planId
+            activePlanId: activePlanId
           },
           { transaction: t }
         );
