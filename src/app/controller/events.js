@@ -1,3 +1,4 @@
+const { addYears } = require("date-fns");
 const { Op } = require("sequelize");
 const { sequelize } = require("../../models");
 const models = require("../../models");
@@ -74,7 +75,7 @@ module.exports = {
       activePlanId
     } = req.body;
 
-    let createEvent, createEventDetails, eventUtilitiesData;
+    let createEvent, createEventDetails, eventUtilitiesData, timelineData;
     try {
       await eventSchema.validateAsync({
         eventName,
@@ -145,17 +146,40 @@ module.exports = {
         eventUtilitiesData = await models.EventUtilities.bulkCreate(utilities, {
           transaction: t
         });
+
+        const activePlanDetail = await models.ActivePlan.findOne(
+          {
+            where: { id: createEvent.activePlanId }
+          },
+          { transaction: t }
+        );
+
+        let timeline = [];
+
+        for (var i = 0; i < activePlanDetail.tenure; i++) {
+          timeline.push({
+            userId: req.payload.aud,
+            eventId: createEvent.id,
+            year: addYears(new Date(activePlanDetail.createdAt), i)
+          });
+        }
+
+        timelineData = await models.Timeline.bulkCreate(timeline, {
+          transaction: t
+        });
       });
 
       res.status(201).json({
         status: "success",
         createEvent,
         createEventDetails,
-        eventUtilitiesData
+        eventUtilitiesData,
+        timelineData
       });
     } catch (error) {
       if (error.isJoi) error.status = 422;
       next(error);
+      console.log(error);
     }
   },
 
@@ -249,6 +273,7 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
+      next(error)
     }
   },
 
